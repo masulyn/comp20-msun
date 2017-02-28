@@ -1,0 +1,19 @@
+body {
+	background-color: lavender;
+}
+
+#title{
+	text-align: center;
+	font-family: arial;
+}
+
+#failvideo{
+	display: block;
+	margin: 0 auto;
+}
+
+#lyrics{
+	font-family: arial;
+	font-size: 10 pt;
+	text-align: center;
+}
