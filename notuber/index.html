@@ -42,14 +42,13 @@
           alert("Geolocation is not supported by your web browser.  What a shame!");
         }
       }
+
       function renderMap(pos)
       {
         me = new google.maps.LatLng(pos.lat, pos.lng);
-        
-        // Update map and go there...
+
         map.panTo(me);
   
-        // Create a marker
         marker = new google.maps.Marker({
           position: me,
           title: "l2r8bViT",
@@ -58,7 +57,6 @@
         });
         marker.setMap(map);
           
-        // Open info window on click of marker
         google.maps.event.addListener(marker, 'click', function() {
           infowindow.setContent(marker.title);
           infowindow.open(map, marker);
@@ -66,29 +64,28 @@
 
         makeRequest(me);
       }
+
       function makeRequest(me){
-      var request = new XMLHttpRequest();
-      var url = "https://defense-in-derpth.herokuapp.com/submit";
-      var params = "username=l2r8bViT&lat=" + myLat + "&lng=" + myLng;
-      request.open("POST", url, true);
+        var request = new XMLHttpRequest();
+        var url = "https://defense-in-derpth.herokuapp.com/submit";
+        var params = "username=l2r8bViT&lat=" + myLat + "&lng=" + myLng;
 
-      //Send the proper header information along with the request
-      request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        request.open("POST", url, true);
 
-      request.onreadystatechange = function() {
-        if(request.readyState == 4 && request.status == 200) {
+        request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-          data = request.responseText;
-          var locations = JSON.parse(data);
-          var cars = locations.vehicles;
-          if (typeof cars == 'undefined') {
-            cars = locations.passengers;
-          }
-          console.log(myLat);
-          console.log(myLng);
+        request.onreadystatechange = function() {
+          if(request.readyState == 4 && request.status == 200) {
+            var im = 'black_car.png'
+            data = request.responseText;
+            var locations = JSON.parse(data);
+            var cars = locations.vehicles;
+            if (typeof cars == 'undefined') {
+              cars = locations.passengers;
+              im = 'passenger.png';
+            }
 
           for (var i = 0; i < cars.length; i++) {  
-            console.log("here");
             var pos = new google.maps.LatLng(cars[i].lat, cars[i].lng);
             var dis = google.maps.geometry.spherical.computeDistanceBetween(me, pos);
 
@@ -97,8 +94,9 @@
             m = new google.maps.Marker({
               position: pos,
               title: "Username: " + cars[i].username + " Distance: " + dis,
-              icon: 'black_car.png'
+              icon: im
             });
+
             m.setMap(map);
 
             google.maps.event.addListener(m, 'click', function() {
@@ -111,6 +109,7 @@
       }
 
       request.send(params);
+      
       }
     </script>
   </head>
